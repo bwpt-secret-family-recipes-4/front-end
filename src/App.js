@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import axios from "axios";
+
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import Navigation from "./components/Navigation";
 
 import axiosWithAuth from "./utils/axiosWithAuth";
 import RecipeContext from "./contexts/RecipeContext";
@@ -91,6 +95,14 @@ function App() {
   );
 
   return (
+    <div>
+      <Switch>
+        <Route path="/signin" component = {SignIn} />
+        <Route path="/signup" component = {SignUp} />
+        <Route path="/" component = {SignIn} />
+      </Switch>
+      <Navigation />
+
     <RecipeContext.Provider
       value={{
         setAllRecipes,
@@ -107,6 +119,8 @@ function App() {
         })}
       </div>
     </RecipeContext.Provider>
+
+    </div>
   );
 }
 
