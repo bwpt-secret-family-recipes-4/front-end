@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Switch, Route, Redirect } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import Navigation from "./components/Navigation";
 
 import axiosWithAuth from "./utils/axiosWithAuth";
 import RecipeContext from "./contexts/RecipeContext";
 
-import Nav from "./components/Nav";
 import Card from "./components/Card";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
 
 function App() {
   const history = useHistory();
@@ -25,51 +26,51 @@ function App() {
     },
   ]);
 
-  const handleSignupSubmit = (e, data) => {
-    e.preventDefault();
-    axios
-      .post("/api/auth/register", data)
-      .then((res) => {
-        console.log(res.data);
-        localStorage.setItem("RecipeToken", res.data.payload); //! maybe?? is a token given back on signup??
-        history.push("/");
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleLoginSubmit = (e, data) => {
-    e.preventDefault();
-    axiosWithAuth()
-      .post("/api/auth/login", data)
-      .then((res) => {
-        console.log(res.data);
-        localStorage.setItem("RecipeToken", res.data.payload);
-        setIsLoggedIn(true);
-        history.push("/");
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleAddRecipeSubmit = (e, data) => {
-    e.preventDefault();
-    axiosWithAuth()
-      .post(`/api/recipes/:id/user`, data)
-      .then((res) => {
-        console.log(res.data);
-        setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
-        history.push("/");
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleEditRecipeSubmit = (e, data) => {
-    e.preventDefault();
-    axiosWithAuth()
-      .put("/api/recipes/:id", data)
-      .then((res) => {
-        console.log(res.data);
-        setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
-        history.push("/");
-      })
-      .catch((err) => console.log(err));
-  };
+  // const handleSignupSubmit = (e, data) => {
+  //   e.preventDefault();
+  //   axios
+  //     .post("/api/auth/register", data)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       localStorage.setItem("RecipeToken", res.data.payload); //! maybe?? is a token given back on signup??
+  //       history.push("/");
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+  // const handleLoginSubmit = (e, data) => {
+  //   e.preventDefault();
+  //   axiosWithAuth()
+  //     .post("/api/auth/login", data)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       localStorage.setItem("RecipeToken", res.data.payload);
+  //       setIsLoggedIn(true);
+  //       history.push("/");
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+  // const handleAddRecipeSubmit = (e, data) => {
+  //   e.preventDefault();
+  //   axiosWithAuth()
+  //     .post(`/api/recipes/:id/user`, data)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
+  //       history.push("/");
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+  // const handleEditRecipeSubmit = (e, data) => {
+  //   e.preventDefault();
+  //   axiosWithAuth()
+  //     .put("/api/recipes/:id", data)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
+  //       history.push("/");
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
   const deleteRecipe = (id) => {
     axiosWithAuth()
       .delete(`/api/recipes/${id}`)
@@ -100,15 +101,11 @@ function App() {
     <RecipeContext.Provider
       value={{
         setAllRecipes,
-        handleSignupSubmit,
-        handleLoginSubmit,
-        handleAddRecipeSubmit,
-        handleEditRecipeSubmit,
         deleteRecipe,
         setIsLoggedIn,
       }}>
       <div className="App">
-        <Nav />
+        <Navigation />
 
         <Switch>
           <Route exact path="/">
