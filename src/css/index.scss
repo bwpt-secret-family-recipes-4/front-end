@@ -23,22 +23,25 @@ nav {
   margin-bottom: 3rem;
   box-shadow: 0 1rem 1rem #00000040;
   .container {
-    padding: 0;
+    padding: 1rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
     max-width: 1200px;
-    button {
+    a {
       cursor: pointer;
+      text-decoration: none;
       outline: none;
-      border: none;
+      border: 1px solid $base-light;
+      color: black;
       background: none;
       font-size: 2rem;
       margin: 0;
-      padding: 1.5rem;
+      padding: 1rem;
       &:hover,
-      .active {
+      &.active {
+        border: 1px solid $base-dark;
         background: $base-dark;
         color: white;
       }
@@ -78,15 +81,15 @@ nav {
   }
   .delete {
     cursor: pointer;
-    position: relative;
-    top: -15.5rem;
-    left: 38rem;
-    border: 1px solid white;
-    color: white;
+    outline: none;
+    border: 1px solid $base-dark;
+    background: none;
+    color: $base-dark;
     padding: 0 0.3rem;
+    margin: 1rem;
     &:hover {
-      background: white;
-      color: black;
+      background: $base-dark;
+      color: white;
     }
   }
   .creator {
@@ -99,7 +102,11 @@ nav {
       list-style: none;
     }
   }
-  p {
+  .directions {
+    padding: 0 1rem;
+    margin: 1rem 0;
+  }
+  .category {
     padding: 0 1rem;
     margin: 1rem 0;
   }
