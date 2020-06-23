@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import * as yup from "yup";
 import axios from "axios";
 
+import RecipeContext from "../contexts/RecipeContext";
+
 function SignIn() {
   // console.log("Sign In: ", props);
+const { handleLoginSubmit } = useContext(RecipeContext);
 const [post, setPost] = useState({});
 const initialState = { userName: "", password: "" };
 const [logInUser, setLogInUser] = useState(initialState);
@@ -92,6 +95,7 @@ const handleChange = e => {
         {/* <pre>{JSON.stringify(post, null, 2)}</pre> */}
     </form>
   )
+
 }
 
 export default SignIn;

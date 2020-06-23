@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import * as yup from "yup";
 import axios from "axios";
 
+import RecipeContext from "../contexts/RecipeContext";
+
 function SignUp() {
+const { handleSignupSubmit } = useContext(RecipeContext);
 const [post, setPost] = useState({});
 const initialState = { fullName: "", userName: "", password: "", email: "" };
 const [user, setUser] = useState(initialState);

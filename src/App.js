@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import axios from "axios";
+
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Navigation from "./components/Navigation";
-import RecipeContext from "./contexts/RecipeContext";
-import Card from "./components/Card";
+
 import axiosWithAuth from "./utils/axiosWithAuth";
+import RecipeContext from "./contexts/RecipeContext";
+
+import Nav from "./components/Nav";
+import Card from "./components/Card";
 
 function App() {
   const history = useHistory();
   const [allRecipes, setAllRecipes] = useState([
     {
+      id: 0,
       name: "Example Recipe",
       creator: "Creators Username",
       ingredients: ["First Ingredient", "Second Ingredient", "Third Ingredient"],
@@ -63,8 +68,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   };
-  const deleteRecipe = (e, id) => {
-    e.preventDefault();
+  const deleteRecipe = (id) => {
     axiosWithAuth()
       .delete(`delete endpoint/${id}`)
       .then((res) => {
@@ -75,16 +79,20 @@ function App() {
       .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    axiosWithAuth()
-      .get("the recipes from backend")
-      .then((res) => {
-        console.log(res);
-        setAllRecipes(res.data);
-        history.push("/"); //! might not need to do this line, only needed if page refresh is required
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  useEffect(
+    () => {
+      axiosWithAuth()
+        .get("the recipes from backend")
+        .then((res) => {
+          console.log(res);
+          setAllRecipes(res.data);
+          history.push("/"); //! might not need to do this line, only needed if page refresh is required
+        })
+        .catch((err) => console.log(err));
+    },
+    // eslint-disable-next-line
+    []
+  );
 
   return (
     <div>
@@ -105,8 +113,9 @@ function App() {
         deleteRecipe,
       }}>
       <div className="App">
+        <Nav />
         {allRecipes.map((item) => {
-          return <Card {...item} />;
+          return <Card key={item.id} {...item} />;
         })}
       </div>
     </RecipeContext.Provider>
