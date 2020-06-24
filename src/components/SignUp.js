@@ -10,10 +10,10 @@ const [user, setUser] = useState(initialState);
 const [errors, setErrors] = useState(initialState);
 
 const formSchema = yup.object().shape({
-    fullName: yup.string().required("Name is required"),
+    fullName: yup.string(),
     userName: yup.string().required("User name is a required field."),
     password: yup.string().required("Password is required."),
-    email: yup.string().required("Email is required.")
+    email: yup.string()
 });
 
 useEffect(() => {
