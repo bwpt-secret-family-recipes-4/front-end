@@ -111,3 +111,38 @@ nav {
     margin: 1rem 0;
   }
 }
+form {
+  margin: 0 auto;
+  max-width: 500px * 0.9;
+  display: flex;
+  flex-direction: column;
+  label {
+    input {
+      margin: 0.5rem;
+    }
+  }
+  .error {
+    display: inline;
+    color: red;
+    margin-left: 0.5rem;
+  }
+  button {
+    cursor: pointer;
+    max-width: 150px;
+    text-decoration: none;
+    outline: none;
+    border: 1px solid $base-light;
+    border-radius: 1rem;
+    color: black;
+    background: $base-light;
+    font-size: 2rem;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    &:hover,
+    &.active {
+      border: 1px solid $base-dark;
+      background: $base-dark;
+      color: white;
+    }
+  }
+}

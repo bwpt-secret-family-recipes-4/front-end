@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as yup from "yup";
-import axios from "axios";
+// import axios from "axios";
 import axiosWithAuth from "../utils/axiosWithAuth";
-// import axiosWithAuth from "../utils/axiosWithAuth";
 
 function SignUp() {
   const initialState = { name: "", username: "", password: "", email: "" };
@@ -31,7 +30,7 @@ function SignUp() {
     axiosWithAuth()
       .post("/api/auth/register", user)
       .then((res) => {
-        console.log("sign up response", res);
+        console.log("sign up response", res.data);
         setUser(initialState);
       })
       .catch((error) => console.log("Register Error", error));
@@ -113,7 +112,7 @@ function SignUp() {
         {errors.email.length > 0 ? <p className="error">{errors.email}</p> : null}
       </label>
       <button type="submit" data-cy="submit">
-        Submit
+        Sign Up
       </button>
       {/* <pre>{JSON.stringify(post, null, 2)}</pre> */}
     </form>

@@ -84,14 +84,17 @@ function App() {
 
   useEffect(
     () => {
-      axiosWithAuth()
-        .get("/api/recipes")
-        .then((res) => {
-          console.log(res);
-          // setAllRecipes(res.data);
-          // history.push("/"); //! might not need to do this line, only needed if page refresh is required
-        })
-        .catch((err) => console.log(err));
+      if (localStorage.getItem("RecipeToken")) {
+        axiosWithAuth()
+          .get("/api/recipes")
+          .then((res) => {
+            console.log(res);
+            // setAllRecipes(res.data);
+            // setIsLoggedIn(true);
+            // history.push("/"); //! might not need to do this line, only needed if page refresh is required
+          })
+          .catch((err) => console.log(err));
+      }
     },
     // eslint-disable-next-line
     []

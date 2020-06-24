@@ -19,9 +19,9 @@ function SignIn() {
   });
 
   useEffect(() => {
-    console.log("Checking form validity.");
+    // console.log("Checking form validity.");
     formSchema.isValid(logInUser).then((isFormValid) => {
-      console.log("Is form valid?", isFormValid);
+      // console.log("Is form valid?", isFormValid);
     });
   }, [logInUser, formSchema]);
 
@@ -52,8 +52,8 @@ function SignIn() {
 
   const handleChange = (e) => {
     e.persist();
-    console.log("Input Changed:", e.target.value);
-    console.log("Input that fired event:", e.target.name);
+    // console.log("Input Changed:", e.target.value);
+    // console.log("Input that fired event:", e.target.name);
 
     const newLogInUser = {
       ...logInUser,
@@ -90,7 +90,7 @@ function SignIn() {
         {errors.password.length > 0 ? <p className="error">{errors.password}</p> : null}
       </label>
       <button type="submit" data-cy="submit">
-        Submit
+        Log In
       </button>
       {/* <pre>{JSON.stringify(post, null, 2)}</pre> */}
     </form>
