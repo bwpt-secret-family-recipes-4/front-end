@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, Switch, Route } from "react-router-dom";
-// import axios from "axios";
+import { Switch, Route } from "react-router-dom";
 
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
@@ -14,7 +13,6 @@ import RecipesList from "./components/RecipesList";
 import RecipeForm from "./components/RecipeForm";
 
 function App() {
-  const history = useHistory();
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("RecipeToken") ? true : false);
   const [user, setUser] = useState("");
   const [allRecipes, setAllRecipes] = useState([
@@ -22,7 +20,7 @@ function App() {
       id: 0,
       title: "Example Recipe",
       creator: "Creators Username",
-      ingredients: ["First Ingredient", "Second Ingredient", "Third Ingredient"],
+      ingredients: "First Ingredient, Second Ingredient, Third Ingredient",
       directions:
         "Follow the instructions to make delicious food that you can do yourself that is easy and tasty",
       category: "test",
@@ -45,8 +43,8 @@ function App() {
       .delete(`/api/recipes/${id}`)
       .then((res) => {
         console.log("delete response", res.data);
-        setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
-        history.push("/");
+        const afterDelete = allRecipes.filter((item) => item.id !== id);
+        setAllRecipes([...afterDelete]);
       })
       .catch((err) => console.log("delete error", err));
   };
