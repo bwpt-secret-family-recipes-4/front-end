@@ -45,8 +45,9 @@ function App() {
       .delete(`/api/recipes/${id}`)
       .then((res) => {
         console.log("delete response", res.data);
-        setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
-        history.push("/");
+        const afterDelete = allRecipes.filter((item) => item.id !== id);
+        setAllRecipes([...afterDelete]); //! what shape is the data returned
+        // history.push("/");
       })
       .catch((err) => console.log("delete error", err));
   };
