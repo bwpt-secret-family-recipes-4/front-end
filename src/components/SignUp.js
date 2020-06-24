@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 // import axios from "axios";
 import axiosWithAuth from "../utils/axiosWithAuth";
 
 function SignUp() {
+  const history = useHistory();
   const initialState = { name: "", username: "", password: "", email: "" };
   const [user, setUser] = useState(initialState);
 
   const [errors, setErrors] = useState(initialState);
 
   const formSchema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    username: yup.string().required("User name is required."),
+    fullName: yup.string(),
+    userName: yup.string().required("User name is a required field."),
     password: yup.string().required("Password is required."),
-    email: yup.string().required("Email is required."),
+    email: yup.string(),
   });
 
   useEffect(() => {
@@ -32,6 +34,7 @@ function SignUp() {
       .then((res) => {
         console.log("sign up response", res.data);
         setUser(initialState);
+        history.push("/");
       })
       .catch((error) => console.log("Register Error", error));
   };

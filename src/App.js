@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, Switch, Route, Redirect } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory, Switch, Route } from "react-router-dom";
 // import axios from "axios";
 
 import SignIn from "./components/SignIn";
@@ -9,11 +9,14 @@ import Navigation from "./components/Navigation";
 import axiosWithAuth from "./utils/axiosWithAuth";
 import RecipeContext from "./contexts/RecipeContext";
 
-import Card from "./components/Card";
+import PrivateRoute from "./components/PrivateRoute";
+import RecipesList from "./components/RecipesList";
+import RecipeForm from "./components/RecipeForm";
 
 function App() {
   const history = useHistory();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState("");
   const [allRecipes, setAllRecipes] = useState([
     {
       id: 0,
@@ -26,40 +29,6 @@ function App() {
     },
   ]);
 
-  // const handleSignupSubmit = (e, data) => {
-  //   e.preventDefault();
-  //   axios
-  //     .post("/api/auth/register", data)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       localStorage.setItem("RecipeToken", res.data.payload); //! maybe?? is a token given back on signup??
-  //       history.push("/");
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-  // const handleLoginSubmit = (e, data) => {
-  //   e.preventDefault();
-  //   axiosWithAuth()
-  //     .post("/api/auth/login", data)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       localStorage.setItem("RecipeToken", res.data.payload);
-  //       setIsLoggedIn(true);
-  //       history.push("/");
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-  // const handleAddRecipeSubmit = (e, data) => {
-  //   e.preventDefault();
-  //   axiosWithAuth()
-  //     .post(`/api/recipes/:id/user`, data)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
-  //       history.push("/");
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
   // const handleEditRecipeSubmit = (e, data) => {
   //   e.preventDefault();
   //   axiosWithAuth()
@@ -75,53 +44,47 @@ function App() {
     axiosWithAuth()
       .delete(`/api/recipes/${id}`)
       .then((res) => {
-        console.log(res.data);
+        console.log("delete response", res.data);
         setAllRecipes([...allRecipes, res.data]); //! what shape is the data returned
         history.push("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("delete error", err));
   };
 
-  useEffect(
-    () => {
-      if (localStorage.getItem("RecipeToken")) {
-        axiosWithAuth()
-          .get("/api/recipes")
-          .then((res) => {
-            console.log(res);
-            // setAllRecipes(res.data);
-            // setIsLoggedIn(true);
-            // history.push("/"); //! might not need to do this line, only needed if page refresh is required
-          })
-          .catch((err) => console.log(err));
-      }
-    },
-    // eslint-disable-next-line
-    []
-  );
+  // useEffect(
+  //   () => {
+  //     axiosWithAuth()
+  //       .get("/api/recipes")
+  //       .then((res) => {
+  //         console.log("recipe list response", res);
+  //         setAllRecipes(res.data);
+  //         // history.push("/"); //! might not need to do this line, only needed if page refresh is required
+  //       })
+  //       .catch((err) => console.log("recipe list error", err));
+  //   },
+  //   // eslint-disable-next-line
+  //   []
+  // );
 
   return (
     <RecipeContext.Provider
       value={{
+        user,
+        setUser,
+        allRecipes,
         setAllRecipes,
         deleteRecipe,
+        isLoggedIn,
         setIsLoggedIn,
       }}>
       <div className="App">
         <Navigation />
 
         <Switch>
-          <Route exact path="/">
-            {isLoggedIn ? (
-              allRecipes.map((item) => {
-                return <Card key={item.id} {...item} />;
-              })
-            ) : (
-              <Redirect to="/login" />
-            )}
-          </Route>
+          <PrivateRoute exact path="/" component={RecipesList} />
           <Route path="/login" component={SignIn} />
           <Route path="/signup" component={SignUp} />
+          <Route path="/add" component={RecipeForm} />
         </Switch>
       </div>
     </RecipeContext.Provider>
