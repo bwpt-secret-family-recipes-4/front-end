@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
-import * as yup from "yup";
+import React, { useState, useContext } from "react";
+// import * as yup from "yup";
 import axios from "axios";
+import RecipeContext from "../contexts/RecipeContext";
 
 function RecipeForm() {
+    const { handleAddRecipeSubmit, handleEditRecipeSubmit, deleteRecipe } = useContext(RecipeContext);
     const [post,setPost] = useState({});
     const initialState = {};
     const [recipe, setRecipe] = useState(initialState);
