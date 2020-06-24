@@ -18,7 +18,7 @@ const RecipesList = () => {
       axiosWithAuth()
         .get("/api/recipes")
         .then((res) => {
-          console.log("recipe list response", res.data);
+          // console.log("recipe list response", res.data);
           setAllRecipes(res.data);
           // history.push("/"); //! might not need to do this line, only needed if page refresh is required
         })
@@ -30,10 +30,14 @@ const RecipesList = () => {
 
   return (
     <>
-      <button onClick={addRecipeRoute}>Add New Recipe</button>
-      {allRecipes.map((item) => {
-        return <Card key={item.id} {...item} />;
-      })}
+      <button className="newrecipe" onClick={addRecipeRoute}>
+        Add New Recipe
+      </button>
+      <div className="allcards">
+        {allRecipes.map((item) => {
+          return <Card key={item.id} {...item} />;
+        })}
+      </div>
     </>
   );
 };

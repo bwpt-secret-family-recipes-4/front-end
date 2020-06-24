@@ -15,7 +15,7 @@ import RecipeForm from "./components/RecipeForm";
 
 function App() {
   const history = useHistory();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("RecipeToken") ? true : false);
   const [user, setUser] = useState("");
   const [allRecipes, setAllRecipes] = useState([
     {
@@ -50,21 +50,6 @@ function App() {
       })
       .catch((err) => console.log("delete error", err));
   };
-
-  // useEffect(
-  //   () => {
-  //     axiosWithAuth()
-  //       .get("/api/recipes")
-  //       .then((res) => {
-  //         console.log("recipe list response", res);
-  //         setAllRecipes(res.data);
-  //         // history.push("/"); //! might not need to do this line, only needed if page refresh is required
-  //       })
-  //       .catch((err) => console.log("recipe list error", err));
-  //   },
-  //   // eslint-disable-next-line
-  //   []
-  // );
 
   return (
     <RecipeContext.Provider
