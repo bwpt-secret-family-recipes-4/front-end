@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 // import axios from "axios";
 import axiosWithAuth from "../utils/axiosWithAuth";
 
 function SignUp() {
+  const history = useHistory();
   const initialState = { name: "", username: "", password: "", email: "" };
   const [user, setUser] = useState(initialState);
 
@@ -32,6 +34,7 @@ function SignUp() {
       .then((res) => {
         console.log("sign up response", res.data);
         setUser(initialState);
+        history.push("/");
       })
       .catch((error) => console.log("Register Error", error));
   };

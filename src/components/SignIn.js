@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 // import axios from "axios";
 
@@ -7,14 +8,15 @@ import RecipeContext from "../contexts/RecipeContext";
 
 function SignIn() {
   // console.log("Sign In: ", props);
-  const { setIsLoggedIn } = useContext(RecipeContext);
-  const initialState = { userName: "", password: "" };
+  const history = useHistory();
+  const { setUser, setIsLoggedIn } = useContext(RecipeContext);
+  const initialState = { username: "", password: "" };
   const [logInUser, setLogInUser] = useState(initialState);
 
-  const [errors, setErrors] = useState({ userName: "", password: "" });
+  const [errors, setErrors] = useState({ username: "", password: "" });
 
   const formSchema = yup.object().shape({
-    userName: yup.string().required("User name is required."),
+    username: yup.string().required("User name is required."),
     password: yup.string().required("Password is required."),
   });
 
@@ -30,12 +32,18 @@ function SignIn() {
     axiosWithAuth()
       .post("/api/auth/login", logInUser)
       .then((res) => {
-        console.log(res);
-        localStorage.setItem("RecipeToken", "");
-        setIsLoggedIn();
+        console.log("login response", res);
+        localStorage.setItem("RecipeToken", res.data.token);
+        setIsLoggedIn(true);
+        setUser(res.data.username);
         setLogInUser(initialState);
+        history.push("/");
       })
-      .catch((error) => console.log("Error", error));
+      .catch((error) => {
+        console.log("Login Error", error);
+        localStorage.removeItem("RecipeToken");
+        setIsLoggedIn(false);
+      });
   };
 
   const validateChange = (e) => {
@@ -65,17 +73,17 @@ function SignIn() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="userName">
+      <label htmlFor="username">
         Username:{"  "}
         <input
-          id="userName"
+          id="username"
           type="text"
-          name="userName"
+          name="username"
           onChange={handleChange}
           value={logInUser.username}
           data-cy="username"
         />
-        {errors.userName.length > 0 ? <span className="error">{errors.userName}</span> : null}
+        {errors.username.length > 0 ? <span className="error">{errors.username}</span> : null}
       </label>
       <label htmlFor="password">
         Password:{"  "}

@@ -7,14 +7,11 @@ const Card = (props) => {
     <div className="card">
       <h3 className="title">{props.title}</h3>
       <span className="creator">{props.creator}</span>
-      <ul>
-        {props.ingredients.map((item, index) => {
-          return <li key={index}>{item}</li>;
-        })}
-      </ul>
+      <p className="directions">{props.ingredients}</p>
       <p className="directions">{props.directions}</p>
       <p className="category">Category: {props.category}</p>
-      <button className="delete" onClick={deleteRecipe(props.id)}>
+      <button className="edit">edit</button>{" "}
+      <button className="delete" onClick={() => deleteRecipe(props.id)}>
         delete
       </button>
     </div>
