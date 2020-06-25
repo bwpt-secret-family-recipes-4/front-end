@@ -12,8 +12,8 @@ function SignUp() {
   const [errors, setErrors] = useState(initialState);
 
   const formSchema = yup.object().shape({
-    fullName: yup.string(),
-    userName: yup.string().required("User name is a required field."),
+    name: yup.string(),
+    username: yup.string().required("User name is a required field."),
     password: yup.string().required("Password is required."),
     email: yup.string(),
   });

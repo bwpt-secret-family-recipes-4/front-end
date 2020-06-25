@@ -4,11 +4,19 @@ import { useHistory } from "react-router-dom";
 import axiosWithAuth from "../utils/axiosWithAuth";
 import RecipeContext from "../contexts/RecipeContext";
 
-function RecipeForm() {
+function RecipeForm(props) {
+  const editData = props.location.state;
   const history = useHistory();
-  const { user, setAllRecipes } = useContext(RecipeContext);
-  const initialState = { title: "", creator: user, ingredients: "", directions: "", category: "" };
-  const [recipe, setRecipe] = useState(initialState);
+  const { isEditing, setIsEditing, user } = useContext(RecipeContext);
+  const initialState = {
+    title: "",
+    creator: user.username,
+    ingredients: "",
+    directions: "",
+    category: "",
+    user_id: user.id,
+  };
+  const [recipe, setRecipe] = useState(editData || initialState);
 
   // const [errors, setErrors] = useState(initialState);
 
@@ -16,17 +24,29 @@ function RecipeForm() {
 
   // });
 
-  const handleSubmit = (e, id) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     axiosWithAuth()
-      .post(`/api/recipes/${id}/${user}`, recipe)
+      .post(`/api/recipes/${user.id}/user`, recipe)
       .then((res) => {
-        console.log(res.data);
-        setAllRecipes([...res.data]); //! what shape is the data returned
+        // console.log(res);
         setRecipe(initialState);
         history.push("/");
       })
-      .catch((error) => console.log("Error", error));
+      .catch((error) => console.log("new recipe Error", error.config.data, { error }));
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    axiosWithAuth()
+      .put(`/api/recipes/${editData.id}`, recipe)
+      .then((res) => {
+        // console.log("edit response", res);
+        console.log("Done Editing");
+        setIsEditing(false);
+        history.push("/");
+      })
+      .catch((err) => console.log("edit error", err));
   };
 
   const handleChange = (e) => {
@@ -42,28 +62,31 @@ function RecipeForm() {
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={isEditing ? handleEdit : handleSubmit}>
         <label htmlFor="title">
           Title:
+          <br />
           <input id="title" type="text" name="title" onChange={handleChange} value={recipe.title} />
         </label>
-        <label htmlFor="creator">
-          Creator:
-          <input
-            id="creator"
-            type="text"
-            name="creator"
-            onChange={handleChange}
-            value={recipe.user}
-          />
-        </label>
         <label htmlFor="ingredients">
-          Ingedients
-          <textarea name="ingredients" rows="5" cols="50" maxlength="10000"></textarea>
+          Ingredients
+          <textarea
+            name="ingredients"
+            rows="5"
+            cols="50"
+            maxLength="10000"
+            onChange={handleChange}
+            value={recipe.ingredients}></textarea>
         </label>
         <label htmlFor="directions">
           Directions
-          <textarea name="directions" rows="5" cols="50" maxlength="10000"></textarea>
+          <textarea
+            name="directions"
+            rows="5"
+            cols="50"
+            maxLength="10000"
+            onChange={handleChange}
+            value={recipe.directions}></textarea>
         </label>
         <label htmlFor="category">
           Category - Breakfast, Lunch, Dinner, Dessert, etc.
