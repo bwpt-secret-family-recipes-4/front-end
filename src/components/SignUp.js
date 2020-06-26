@@ -17,6 +17,7 @@ function SignUp() {
     password: yup.string().required("Password is required."),
     email: yup.string(),
   });
+  
   useEffect(() => {
     // console.log("Checking form validity.");
     formSchema.isValid(user).then((isFormValid) => {
