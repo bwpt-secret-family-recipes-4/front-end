@@ -12,12 +12,12 @@ function SignUp() {
   const [errors, setErrors] = useState(initialState);
 
   const formSchema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    username: yup.string().required("User name is required."),
+    name: yup.string(),
+    username: yup.string().required("User name is a required field."),
     password: yup.string().required("Password is required."),
-    email: yup.string().required("Email is required."),
+    email: yup.string(),
   });
-
+  
   useEffect(() => {
     // console.log("Checking form validity.");
     formSchema.isValid(user).then((isFormValid) => {

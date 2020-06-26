@@ -7,6 +7,7 @@ const Navigation = () => {
 
   const logOut = () => {
     localStorage.removeItem("RecipeToken");
+    localStorage.removeItem("RecipeUser");
     setIsLoggedIn(false);
   };
   return (

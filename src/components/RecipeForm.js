@@ -4,11 +4,19 @@ import * as yup from "yup";
 import axiosWithAuth from "../utils/axiosWithAuth";
 import RecipeContext from "../contexts/RecipeContext";
 
-function RecipeForm() {
+function RecipeForm(props) {
+  const editData = props.location.state;
   const history = useHistory();
-  const { user, setAllRecipes } = useContext(RecipeContext);
-  const initialState = { title: "", creator: user, ingredients: "", directions: "", category: "" };
-  const [recipe, setRecipe] = useState(initialState);
+  const { isEditing, setIsEditing, user } = useContext(RecipeContext);
+  const initialState = {
+    title: "",
+    creator: user.username,
+    ingredients: "",
+    directions: "",
+    category: "",
+    user_id: user.id,
+  };
+  const [recipe, setRecipe] = useState(editData || initialState);
 
   const [errors, setErrors] = useState(initialState);
 
@@ -25,17 +33,29 @@ function RecipeForm() {
     }, [recipe, formSchema])
   })
 
-  const handleSubmit = (e, id) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     axiosWithAuth()
-      .post(`/api/recipes/${id}/${user}`, recipe)
+      .post(`/api/recipes/${user.id}/user`, recipe)
       .then((res) => {
-        console.log(res.data);
-        setAllRecipes([...res.data]); //! what shape is the data returned
+        // console.log(res);
         setRecipe(initialState);
         history.push("/");
       })
-      .catch((error) => console.log("Error", error));
+      .catch((error) => console.log("new recipe Error", error.config.data, { error }));
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    axiosWithAuth()
+      .put(`/api/recipes/${editData.id}`, recipe)
+      .then((res) => {
+        // console.log("edit response", res);
+        console.log("Done Editing");
+        setIsEditing(false);
+        history.push("/");
+      })
+      .catch((err) => console.log("edit error", err));
   };
 
   const validateChange = (e) => {
@@ -68,26 +88,34 @@ function RecipeForm() {
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={isEditing ? handleEdit : handleSubmit}>
         <label htmlFor="title">
           Title:
-          <input id="title"
-          type="text"
-          name="title"
-          onChange={handleChange}
-          value={recipe.title}
-          />
+          <br />
+          <input id="title" type="text" name="title" onChange={handleChange} value={recipe.title} />
           {errors.title.length > 0 ? <span className="error">{errors.title}</span> : null}
         </label>
         <label htmlFor="ingredients">
-          Ingedients
-          <textarea name="ingredients" rows="5" cols="50" maxLength="10000" onChange={handleChange} value= {recipe.ingredients}></textarea>
-          {errors.ingredients.length > 0 ? <span className="error">{errors.ingredients}</span> : null}
+          Ingredients
+          <textarea
+            name="ingredients"
+            rows="5"
+            cols="50"
+            maxLength="10000"
+            onChange={handleChange}
+            value={recipe.ingredients}></textarea>
+            {errors.ingredients.length > 0 ? <span className="error">{errors.ingredients}</span> : null}
         </label>
         <label htmlFor="directions">
           Directions
-          <textarea name="directions" rows="5" cols="50" maxLength="10000" onChange={handleChange} value={recipe.directions}></textarea>
-          {errors.directions.length > 0 ? <span className="error">{errors.directions}</span> : null}
+          <textarea
+            name="directions"
+            rows="5"
+            cols="50"
+            maxLength="10000"
+            onChange={handleChange}
+            value={recipe.directions}></textarea>
+            {errors.directions.length > 0 ? <span className="error">{errors.directions}</span> : null}
         </label>
         <label htmlFor="category">
           Category - Breakfast, Lunch, Dinner, Dessert, etc.
