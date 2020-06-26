@@ -9,7 +9,7 @@ import RecipeContext from "../contexts/RecipeContext";
 function SignIn() {
   // console.log("Sign In: ", props);
   const history = useHistory();
-  const { setUser, setIsLoggedIn } = useContext(RecipeContext);
+  const { setIsLoggedIn, setUser } = useContext(RecipeContext);
   const initialState = { username: "", password: "" };
   const [logInUser, setLogInUser] = useState(initialState);
 
@@ -32,10 +32,14 @@ function SignIn() {
     axiosWithAuth()
       .post("/api/auth/login", logInUser)
       .then((res) => {
-        console.log("login response", res);
+        // console.log("login response", res);
         localStorage.setItem("RecipeToken", res.data.token);
+        localStorage.setItem(
+          "RecipeUser",
+          JSON.stringify({ id: res.data.id, username: res.data.username })
+        );
+        setUser({ id: res.data.id, username: res.data.username });
         setIsLoggedIn(true);
-        setUser(res.data.username);
         setLogInUser(initialState);
         history.push("/");
       })
